@@ -13,10 +13,15 @@ from pathlib import Path
 import MDAnalysis as mda
 import numpy as np
 import scipy.constants
-
 from maicos.core import AnalysisBase
 from maicos.lib.math import FT, iFT
-from maicos.lib.util import bin, charge_neutral, citation_reminder, get_compound, render_docs
+from maicos.lib.util import (
+    bin,
+    charge_neutral,
+    citation_reminder,
+    get_compound,
+    render_docs,
+)
 
 
 @render_docs

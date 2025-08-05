@@ -2,6 +2,11 @@
 *.pyc
 .tox/
 build/
+*.so
+*.egg-info
+*.npz
+*.lock
+*.dat
 
 .coverage
 coverage.xml
