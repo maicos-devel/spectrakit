@@ -5,10 +5,13 @@ include CHANGELOG.rst
 include README.md
 include MANIFEST.in
 
-exclude example.ipynb
-exclude tests.py
+prune .tox
+prune developer
+prune examples
+prune tests
+
+exclude .gitattributes
+exclude .gitignore
 exclude tox.ini
-exclude .gitlab-ci.yml
 
 global-exclude *.py[cod] __pycache__/* *.so *.dylib
-
