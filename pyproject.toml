@@ -15,8 +15,8 @@ maintainers = [
     {name = "Henrik Stooß"},
 ]
 readme = "README.md"
-requires-python = ">=3.8"
-keywords = ["Science", "Molecular Dynamics", "Confined Systems", "MDAnalysis"]
+requires-python = ">=3.11"
+keywords = ["Science", "Molecular Dynamics", "Dielectric Spectra", "MDAnalysis"]
 license = "GPL-3.0-or-later"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
@@ -27,19 +27,17 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
     "Topic :: Scientific/Engineering :: Chemistry",
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-dependencies = [
-    "maicos>=0.11.2"
-]
+dependencies = ["maicos>=0.11.2"]
 dynamic = ["version"]
 
 [project.urls]
