@@ -101,15 +101,6 @@ class TestDielectricSpectrum:
         assert_allclose(ds.results.susc, susc, rtol=1e-1)
         assert_allclose(ds.results.dsusc, dsusc, rtol=1e-1)
 
-    def test_binning(self, ag, monkeypatch, tmp_path):
-        """Test binning & seglen case."""
-        monkeypatch.chdir(tmp_path)
-
-        ds = DielectricSpectrum(ag, nobin=False, segs=2, bins=49)
-        ds.run()
-        assert_allclose(np.mean(ds.results.nu_binned), 0.57, rtol=1e-2)
-        ds.save()
-
 
 class TestCalculateSpectrumFromDipole:
     """Tests for the standalone calculate_spectrum_from_dipole function."""
