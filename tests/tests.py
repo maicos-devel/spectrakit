@@ -154,7 +154,7 @@ class TestCalculateSpectrumFromDipole:
         ag = u.atoms
 
         # Run DielectricSpectrum
-        ds = DielectricSpectrum(ag, segs=5, nobin=True)
+        ds = DielectricSpectrum(ag, segs=1, nobin=True)
         ds.run()
 
         # Use standalone function with extracted dipole data
@@ -163,7 +163,7 @@ class TestCalculateSpectrumFromDipole:
             dt=ds.dt,
             volume=ds.results.V,
             temperature=ds.temperature,
-            segs=5,
+            segs=1,
             nobin=True,
         )
 
