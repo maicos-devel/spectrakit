@@ -181,7 +181,7 @@ def calculate_spectrum_from_dipole(
     logging.info(f"Frequency spacing:    ~ {segs / (n_frames * dt):.5f} THz")
 
     # Bin data if there are too many points
-    if not (nobin or seglen <= bins):
+    if not nobin or not (seglen <= bins):
         bin_indices = np.logspace(
             np.log(binafter) / np.log(10),
             np.log(len(susc)) / np.log(10),
