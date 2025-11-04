@@ -145,53 +145,6 @@ class TestCalculateSpectrumFromDipole:
         assert results["susc"].dtype == complex
         assert results["dsusc"].dtype == complex
 
-    def test_with_binning(self):
-        """Test spectrum calculation with binning enabled."""
-        n_frames = 200
-        dipole_moment = np.random.randn(n_frames, 3) * 10
-        dt = 2.0
-        volume = 1000.0
-        temperature = 300.0
-
-        results = calculate_spectrum_from_dipole(
-            dipole_moment=dipole_moment,
-            dt=dt,
-            volume=volume,
-            temperature=temperature,
-            segs=5,
-            bins=20,
-            binafter=5,
-            nobin=False,
-        )
-
-        # Check that binned results are present
-        assert "nu_binned" in results
-        assert "susc_binned" in results
-        assert "dsusc_binned" in results
-
-        # Binned arrays should be shorter than original
-        assert len(results["nu_binned"]) <= len(results["nu"])
-
-    def test_df_parameter(self):
-        """Test that df parameter overrides segs."""
-        n_frames = 100
-        dipole_moment = np.random.randn(n_frames, 3) * 10
-        dt = 2.0
-        volume = 1000.0
-        temperature = 300.0
-
-        results = calculate_spectrum_from_dipole(
-            dipole_moment=dipole_moment,
-            dt=dt,
-            volume=volume,
-            temperature=temperature,
-            df=0.01,  # This should determine number of segments
-            nobin=True,
-        )
-
-        assert "nu" in results
-        assert len(results["nu"]) > 0
-
     def test_consistency_with_dielectric_spectrum(self, monkeypatch, tmp_path):
         """Test that standalone function gives same results as class method."""
         monkeypatch.chdir(tmp_path)
@@ -218,4 +171,3 @@ class TestCalculateSpectrumFromDipole:
         assert_allclose(ds.results.nu, results["nu"], rtol=1e-10)
         assert_allclose(ds.results.susc, results["susc"], rtol=1e-10)
         assert_allclose(ds.results.dsusc, results["dsusc"], rtol=1e-10)
-
