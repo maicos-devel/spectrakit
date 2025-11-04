@@ -9,6 +9,7 @@
 
 import logging
 from pathlib import Path
+from typing import Any
 
 import MDAnalysis as mda
 import numpy as np
@@ -22,6 +23,193 @@ from maicos.lib.util import (
     get_compound,
     render_docs,
 )
+
+
+def calculate_spectrum_from_dipole(
+    dipole_moment: np.ndarray,
+    dt: float,
+    volume: float,
+    temperature: float,
+    segs: int | None = None,
+    df: float | None = None,
+    bins: int = 200,
+    binafter: float = 20,
+    nobin: bool = False,
+) -> dict[str, np.ndarray]:
+    """Calculate dielectric spectrum from dipole moment time series.
+
+    This function computes the complex dielectric susceptibility from a dipole
+    moment time series using the Fluctuation-Dissipation theorem. It can be used
+    independently of MDAnalysis trajectories.
+
+    Parameters
+    ----------
+    dipole_moment : np.ndarray
+        Dipole moment time series with shape (n_frames, 3) in units of e·Å.
+    dt : float
+        Time step between frames in picoseconds.
+    volume : float
+        Average system volume in Ų.
+    temperature : float
+        System temperature in Kelvin.
+    segs : int, optional
+        Number of segments to break the trajectory into. If None and df is None,
+        defaults to 20.
+    df : float, optional
+        Desired frequency spacing in THz. Overrides segs if provided.
+    bins : int, default=200
+        Number of bins for data averaging (logarithmic binning).
+    binafter : float, default=20
+        Number of low-frequency data points left unbinned.
+    nobin : bool, default=False
+        If True, prevents data binning.
+
+    Returns
+    -------
+    dict[str, np.ndarray]
+        Dictionary containing:
+        - 't': time array
+        - 'nu': frequency array (THz)
+        - 'susc': complex susceptibility
+        - 'dsusc': standard deviation of susceptibility
+        - 'nu_binned': binned frequencies (if binning applied)
+        - 'susc_binned': binned susceptibility (if binning applied)
+        - 'dsusc_binned': binned std deviation (if binning applied)
+
+    Notes
+    -----
+    The algorithm is based on the Fluctuation Dissipation Relation:
+    χ(f) = -1/(3 V k_B T ε_0) L[θ(t) ⟨P(0) dP(t)/dt⟩]
+    where L is the Laplace transformation.
+
+    """
+    P = dipole_moment.copy()
+    n_frames = len(P)
+
+    # Determine number of segments
+    if segs is None:
+        if df is not None:
+            segs = np.max([int(n_frames * dt * df), 2])
+        else:
+            segs = 20
+
+    if df is not None:
+        segs = np.max([int(n_frames * dt * df), 2])
+
+    seglen = int(n_frames / segs)
+
+    # Prefactor for susceptibility
+    # Polarization: eÅ² to e m²
+    pref = (scipy.constants.e) ** 2 * scipy.constants.angstrom**2
+    # Volume: Ų to m³
+    pref /= 3 * volume * scipy.constants.angstrom**3
+    pref /= scipy.constants.k * temperature
+    pref /= scipy.constants.epsilon_0
+
+    # Create time array
+    t = dt * np.arange(n_frames)
+
+    # If t too short to simply truncate
+    if len(t) < 2 * seglen:
+        t = np.append(t, t + t[-1] + dt)
+
+    # Truncate t array
+    t = t[: 2 * seglen]
+
+    # Get frequencies
+    nu = FT(
+        t,
+        np.append(P[:seglen, 0], np.zeros(seglen)),
+    )[0]
+
+    # Initialize arrays
+    susc = np.zeros(seglen, dtype=complex)
+    dsusc = np.zeros(seglen, dtype=complex)
+    ss = np.zeros((2 * seglen), dtype=complex)
+
+    # Loop over segments
+    for s in range(0, segs):
+        logging.info(f"\rSegment {s + 1} of {segs}")
+        ss = 0 + 0j
+
+        # Loop over x, y, z
+        for i in range(3):
+            FP: np.ndarray = FT(
+                t,
+                np.append(
+                    P[s * seglen : (s + 1) * seglen, i],
+                    np.zeros(seglen),
+                ),
+                False,
+            )
+            ss += FP.real * FP.real + FP.imag * FP.imag
+
+        ss *= nu * 1j
+
+        # Get the real part by Kramers-Kronig
+        ift: np.ndarray = iFT(
+            t,
+            1j * np.sign(nu) * FT(nu, ss, False),
+            False,
+        )
+        ss.real = ift.imag
+
+        if s == 0:
+            susc += ss[seglen:]
+        else:
+            ds = ss[seglen:] - (susc / s)
+            susc += ss[seglen:]
+            dif = ss[seglen:] - (susc / (s + 1))
+            ds.real *= dif.real
+            ds.imag *= dif.imag
+            # Variance by Welford's Method
+            dsusc += ds
+
+    dsusc.real = np.sqrt(dsusc.real)
+    dsusc.imag = np.sqrt(dsusc.imag)
+
+    # 1/2 b/c it's the full FT, not only half-domain
+    susc *= pref / (2 * seglen * segs * dt)
+    dsusc *= pref / (2 * seglen * segs * dt)
+
+    # Discard negative-frequency data
+    nu = nu[seglen:] / (2 * np.pi)
+
+    results = {
+        "t": t,
+        "nu": nu,
+        "susc": susc,
+        "dsusc": dsusc,
+    }
+
+    logging.info(
+        f"Length of segments:    {seglen} frames, {seglen * dt:.0f} ps"
+    )
+    logging.info(
+        f"Frequency spacing:    ~ {segs / (n_frames * dt):.5f} THz"
+    )
+
+    # Bin data if there are too many points
+    if not (nobin or seglen <= bins):
+        bin_indices = np.logspace(
+            np.log(binafter) / np.log(10),
+            np.log(len(susc)) / np.log(10),
+            bins - binafter + 1,
+        ).astype(int)
+        bin_indices = np.unique(np.append(np.arange(binafter), bin_indices))[:-1]
+
+        results["nu_binned"] = bin(nu, bin_indices)
+        results["susc_binned"] = bin(susc, bin_indices)
+        results["dsusc_binned"] = bin(dsusc, bin_indices)
+
+        logging.info(
+            f"Binning data above datapoint {binafter} in log-spaced bins"
+        )
+        logging.info(f"Binned data consists of {len(susc)} datapoints")
+    else:
+        logging.info(f"Not binning data: there are {len(susc)} datapoints")
+
+    return results
 
 
 @render_docs
@@ -131,125 +319,37 @@ class DielectricSpectrum(AnalysisBase):
         )
 
     def _conclude(self) -> None:
-        self.results.t = self._trajectory.dt * self.frames
         self.results.V = self.V / self._index
-
         self.results.P = self.P
-
-        # Find a suitable number of segments if it's not specified:
-        if self.df is not None:
-            self.segs = np.max([int(self.n_frames * self.dt * self.df), 2])
-
-        self.seglen = int(self.n_frames / self.segs)
-
-        # Prefactor for susceptibility: Polarization: eÅ^2 to e m^2
-        pref = (scipy.constants.e) ** 2 * scipy.constants.angstrom**2
-        # Volume: Å^3 to m^3
-        pref /= 3 * self.results.V * scipy.constants.angstrom**3
-        pref /= scipy.constants.k * self.temperature
-        pref /= scipy.constants.epsilon_0
 
         logging.info("Calculating susceptibility and errors...")
 
-        # if t too short to simply truncate
-        if len(self.results.t) < 2 * self.seglen:
-            self.results.t = np.append(
-                self.results.t, self.results.t + self.results.t[-1] + self.dt
-            )
-
-        # truncate t array (it's automatically longer than 2 * seglen)
-        self.results.t = self.results.t[: 2 * self.seglen]
-        # get freqs
-        self.results.nu = FT(
-            self.results.t,
-            np.append(self.results.P[: self.seglen, 0], np.zeros(self.seglen)),
-        )[0]
-        # susceptibility
-        self.results.susc = np.zeros(self.seglen, dtype=complex)
-        # std deviation of susceptibility
-        self.results.dsusc = np.zeros(self.seglen, dtype=complex)
-        # susceptibility for current seg
-        ss = np.zeros((2 * self.seglen), dtype=complex)
-
-        # loop over segs
-        for s in range(0, self.segs):
-            logging.info(f"\rSegment {s + 1} of {self.segs}")
-            ss = 0 + 0j
-
-            # loop over x, y, z
-            for self._i in range(3):
-                FP: np.ndarry = FT(
-                    self.results.t,
-                    np.append(
-                        self.results.P[
-                            s * self.seglen : (s + 1) * self.seglen, self._i
-                        ],
-                        np.zeros(self.seglen),
-                    ),
-                    False,
-                )
-                ss += FP.real * FP.real + FP.imag * FP.imag
-
-            ss *= self.results.nu * 1j
-
-            # Get the real part by Kramers Kronig
-            ift: np.ndarray = iFT(
-                self.results.t,
-                1j * np.sign(self.results.nu) * FT(self.results.nu, ss, False),
-                False,
-            )
-            ss.real = ift.imag
-
-            if s == 0:
-                self.results.susc += ss[self.seglen :]
-
-            else:
-                ds = ss[self.seglen :] - (self.results.susc / s)
-                self.results.susc += ss[self.seglen :]
-                dif = ss[self.seglen :] - (self.results.susc / (s + 1))
-                ds.real *= dif.real
-                ds.imag *= dif.imag
-                # variance by Welford's Method
-                self.results.dsusc += ds
-
-        self.results.dsusc.real = np.sqrt(self.results.dsusc.real)
-        self.results.dsusc.imag = np.sqrt(self.results.dsusc.imag)
-
-        # 1/2 b/c it's the full FT, not only half-domain
-        self.results.susc *= pref / (2 * self.seglen * self.segs * self.dt)
-        self.results.dsusc *= pref / (2 * self.seglen * self.segs * self.dt)
-
-        # Discard negative-frequency data; contains the same information as positive
-        # regime: Now nu represents positive f instead of omega
-        self.results.nu = self.results.nu[self.seglen :] / (2 * np.pi)
-
-        logging.info(
-            f"Length of segments:    {self.seglen} frames,"
-            f" {self.seglen * self.dt:.0f} ps"
-        )
-        logging.info(
-            f"Frequency spacing:    ~ {self.segs / (self.n_frames * self.dt):.5f} THz"
+        # Calculate spectrum using the decoupled function
+        spectrum_results = calculate_spectrum_from_dipole(
+            dipole_moment=self.results.P,
+            dt=self.dt,
+            volume=self.results.V,
+            temperature=self.temperature,
+            segs=self.segs,
+            df=self.df,
+            bins=self.bins,
+            binafter=self.binafter,
+            nobin=self.nobin,
         )
 
-        # Bin data if there are too many points:
-        if not (self.nobin or self.seglen <= self.bins):
-            bins = np.logspace(
-                np.log(self.binafter) / np.log(10),
-                np.log(len(self.results.susc)) / np.log(10),
-                self.bins - self.binafter + 1,
-            ).astype(int)
-            bins = np.unique(np.append(np.arange(self.binafter), bins))[:-1]
+        # Store results
+        self.results.t = spectrum_results["t"]
+        self.results.nu = spectrum_results["nu"]
+        self.results.susc = spectrum_results["susc"]
+        self.results.dsusc = spectrum_results["dsusc"]
 
-            self.results.nu_binned = bin(self.results.nu, bins)
-            self.results.susc_binned = bin(self.results.susc, bins)
-            self.results.dsusc_binned = bin(self.results.dsusc, bins)
+        if "nu_binned" in spectrum_results:
+            self.results.nu_binned = spectrum_results["nu_binned"]
+            self.results.susc_binned = spectrum_results["susc_binned"]
+            self.results.dsusc_binned = spectrum_results["dsusc_binned"]
 
-            logging.info(
-                f"Binning data above datapoint {self.binafter} in log-spaced bins"
-            )
-            logging.info(f"Binned data consists of {len(self.results.susc)} datapoints")
-        # data is binned
-        logging.info(f"Not binning data: there are {len(self.results.susc)} datapoints")
+        # Store seglen for compatibility
+        self.seglen = int(self.n_frames / self.segs)
 
     @render_docs
     def save(self) -> None:
