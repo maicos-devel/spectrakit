@@ -15,7 +15,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
-from spectrakit import DielectricSpectrum
+from spectrakit import DielectricSpectrum, calculate_spectrum_from_dipole
 
 sys.path.append(str(Path(__file__).parents[1]))
 from data import WATER_TPR_NPT, WATER_TRR_NPT  # noqa: E402
@@ -109,3 +109,113 @@ class TestDielectricSpectrum:
         ds.run()
         assert_allclose(np.mean(ds.results.nu_binned), 0.57, rtol=1e-2)
         ds.save()
+
+
+class TestCalculateSpectrumFromDipole:
+    """Tests for the standalone calculate_spectrum_from_dipole function."""
+
+    def test_basic_calculation(self):
+        """Test basic spectrum calculation from synthetic dipole data."""
+        # Create synthetic dipole data
+        n_frames = 100
+        dipole_moment = np.random.randn(n_frames, 3) * 10
+        dt = 2.0  # ps
+        volume = 1000.0  # Ų
+        temperature = 300.0  # K
+
+        results = calculate_spectrum_from_dipole(
+            dipole_moment=dipole_moment,
+            dt=dt,
+            volume=volume,
+            temperature=temperature,
+            segs=5,
+            nobin=True,
+        )
+
+        # Check that results contain expected keys
+        assert "nu" in results
+        assert "susc" in results
+        assert "dsusc" in results
+        assert "t" in results
+
+        # Check shapes and types
+        assert isinstance(results["nu"], np.ndarray)
+        assert isinstance(results["susc"], np.ndarray)
+        assert isinstance(results["dsusc"], np.ndarray)
+        assert results["susc"].dtype == complex
+        assert results["dsusc"].dtype == complex
+
+    def test_with_binning(self):
+        """Test spectrum calculation with binning enabled."""
+        n_frames = 200
+        dipole_moment = np.random.randn(n_frames, 3) * 10
+        dt = 2.0
+        volume = 1000.0
+        temperature = 300.0
+
+        results = calculate_spectrum_from_dipole(
+            dipole_moment=dipole_moment,
+            dt=dt,
+            volume=volume,
+            temperature=temperature,
+            segs=5,
+            bins=20,
+            binafter=5,
+            nobin=False,
+        )
+
+        # Check that binned results are present
+        assert "nu_binned" in results
+        assert "susc_binned" in results
+        assert "dsusc_binned" in results
+
+        # Binned arrays should be shorter than original
+        assert len(results["nu_binned"]) <= len(results["nu"])
+
+    def test_df_parameter(self):
+        """Test that df parameter overrides segs."""
+        n_frames = 100
+        dipole_moment = np.random.randn(n_frames, 3) * 10
+        dt = 2.0
+        volume = 1000.0
+        temperature = 300.0
+
+        results = calculate_spectrum_from_dipole(
+            dipole_moment=dipole_moment,
+            dt=dt,
+            volume=volume,
+            temperature=temperature,
+            df=0.01,  # This should determine number of segments
+            nobin=True,
+        )
+
+        assert "nu" in results
+        assert len(results["nu"]) > 0
+
+    def test_consistency_with_dielectric_spectrum(self, monkeypatch, tmp_path):
+        """Test that standalone function gives same results as class method."""
+        monkeypatch.chdir(tmp_path)
+
+        # Load test data
+        u = mda.Universe(WATER_TPR_NPT, WATER_TRR_NPT)
+        ag = u.atoms
+
+        # Run DielectricSpectrum
+        ds = DielectricSpectrum(ag, segs=5, nobin=True)
+        ds.run()
+
+        # Use standalone function with extracted dipole data
+        results = calculate_spectrum_from_dipole(
+            dipole_moment=ds.results.P,
+            dt=ds.dt,
+            volume=ds.results.V,
+            temperature=ds.temperature,
+            segs=5,
+            nobin=True,
+        )
+
+        # Results should be very similar
+        assert_allclose(ds.results.nu, results["nu"], rtol=1e-10)
+        assert_allclose(ds.results.susc, results["susc"], rtol=1e-10)
+        assert_allclose(ds.results.dsusc, results["dsusc"], rtol=1e-10)
+
