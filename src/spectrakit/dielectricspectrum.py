@@ -182,12 +182,8 @@ def calculate_spectrum_from_dipole(
         "dsusc": dsusc,
     }
 
-    logging.info(
-        f"Length of segments:    {seglen} frames, {seglen * dt:.0f} ps"
-    )
-    logging.info(
-        f"Frequency spacing:    ~ {segs / (n_frames * dt):.5f} THz"
-    )
+    logging.info(f"Length of segments:    {seglen} frames, {seglen * dt:.0f} ps")
+    logging.info(f"Frequency spacing:    ~ {segs / (n_frames * dt):.5f} THz")
 
     # Bin data if there are too many points
     if not (nobin or seglen <= bins):
@@ -202,9 +198,7 @@ def calculate_spectrum_from_dipole(
         results["susc_binned"] = bin(susc, bin_indices)
         results["dsusc_binned"] = bin(dsusc, bin_indices)
 
-        logging.info(
-            f"Binning data above datapoint {binafter} in log-spaced bins"
-        )
+        logging.info(f"Binning data above datapoint {binafter} in log-spaced bins")
         logging.info(f"Binned data consists of {len(susc)} datapoints")
     else:
         logging.info(f"Not binning data: there are {len(susc)} datapoints")
