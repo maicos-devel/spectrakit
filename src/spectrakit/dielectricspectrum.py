@@ -9,7 +9,6 @@
 
 import logging
 from pathlib import Path
-from typing import Any
 
 import MDAnalysis as mda
 import numpy as np
@@ -87,11 +86,7 @@ def calculate_spectrum_from_dipole(
     n_frames = len(P)
 
     # Determine number of segments
-    if segs is None:
-        if df is not None:
-            segs = np.max([int(n_frames * dt * df), 2])
-        else:
-            segs = 20
+    segs = np.max([int(n_frames * dt * df), 2]) if df is not None else 20
 
     if df is not None:
         segs = np.max([int(n_frames * dt * df), 2])
