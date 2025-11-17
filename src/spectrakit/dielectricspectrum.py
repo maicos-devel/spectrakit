@@ -48,7 +48,7 @@ def calculate_spectrum_from_dipole(
     dt : float
         Time step between frames in picoseconds.
     volume : float
-        Average system volume in Ų.
+        Average system volume in Angstrom^3.
     temperature : float
         System temperature in Kelvin.
     segs : int, optional
@@ -86,10 +86,10 @@ def calculate_spectrum_from_dipole(
     n_frames = len(P)
 
     # Determine number of segments
-    segs = np.max([int(n_frames * dt * df), 2]) if df is not None else 20
-
     if df is not None:
         segs = np.max([int(n_frames * dt * df), 2])
+    elif segs is None:
+        segs = 20
 
     seglen = int(n_frames / segs)
 
@@ -101,40 +101,26 @@ def calculate_spectrum_from_dipole(
     pref /= scipy.constants.k * temperature
     pref /= scipy.constants.epsilon_0
 
-    # Create time array
-    t = dt * np.arange(n_frames)
+    # Create time array for segment (no padding)
+    t = dt * np.arange(seglen)
 
-    # If t too short to simply truncate
-    if len(t) < 2 * seglen:
-        t = np.append(t, t + t[-1] + dt)
-
-    # Truncate t array
-    t = t[: 2 * seglen]
-
-    # Get frequencies
-    nu = FT(
-        t,
-        np.append(P[:seglen, 0], np.zeros(seglen)),
-    )[0]
+    # Get frequencies (no padding)
+    nu = FT(t, P[:seglen, 0])[0]
 
     # Initialize arrays
     susc = np.zeros(seglen, dtype=complex)
     dsusc = np.zeros(seglen, dtype=complex)
-    ss = np.zeros((2 * seglen), dtype=complex)
 
     # Loop over segments
     for s in range(0, segs):
-        logging.info(f"\rSegment {s + 1} of {segs}")
+        # logging.info(f"\rSegment {s + 1} of {segs}")
         ss = 0 + 0j
 
         # Loop over x, y, z
         for i in range(3):
             FP: np.ndarray = FT(
                 t,
-                np.append(
-                    P[s * seglen : (s + 1) * seglen, i],
-                    np.zeros(seglen),
-                ),
+                P[s * seglen : (s + 1) * seglen, i],
                 False,
             )
             ss += FP.real * FP.real + FP.imag * FP.imag
@@ -150,11 +136,11 @@ def calculate_spectrum_from_dipole(
         ss.real = ift.imag
 
         if s == 0:
-            susc += ss[seglen:]
+            susc += ss
         else:
-            ds = ss[seglen:] - (susc / s)
-            susc += ss[seglen:]
-            dif = ss[seglen:] - (susc / (s + 1))
+            ds = ss - (susc / s)
+            susc += ss
+            dif = ss - (susc / (s + 1))
             ds.real *= dif.real
             ds.imag *= dif.imag
             # Variance by Welford's Method
@@ -163,12 +149,18 @@ def calculate_spectrum_from_dipole(
     dsusc.real = np.sqrt(dsusc.real)
     dsusc.imag = np.sqrt(dsusc.imag)
 
-    # 1/2 b/c it's the full FT, not only half-domain
-    susc *= pref / (2 * seglen * segs * dt)
-    dsusc *= pref / (2 * seglen * segs * dt)
+    # Normalization factor
+    susc *= pref / (seglen * segs * dt)
+    dsusc *= pref / (seglen * segs * dt)
 
-    # Discard negative-frequency data
-    nu = nu[seglen:] / (2 * np.pi)
+    # Convert to THz
+    nu = nu / (2 * np.pi)
+
+    # Only keep positive frequencies
+    pos_mask = nu >= 0
+    nu = nu[pos_mask]
+    susc = susc[pos_mask]
+    dsusc = dsusc[pos_mask]
 
     results = {
         "t": t,
@@ -181,7 +173,7 @@ def calculate_spectrum_from_dipole(
     logging.info(f"Frequency spacing:    ~ {segs / (n_frames * dt):.5f} THz")
 
     # Bin data if there are too many points
-    if not nobin or not (seglen <= bins):
+    if not nobin and seglen > bins:
         bin_indices = np.logspace(
             np.log(binafter) / np.log(10),
             np.log(len(susc)) / np.log(10),
@@ -197,6 +189,7 @@ def calculate_spectrum_from_dipole(
         logging.info(f"Binned data consists of {len(susc)} datapoints")
     else:
         logging.info(f"Not binning data: there are {len(susc)} datapoints")
+        pass
 
     return results
 
