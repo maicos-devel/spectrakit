@@ -113,7 +113,7 @@ def calculate_spectrum_from_dipole(
 
     # Loop over segments
     for s in range(0, segs):
-        # logging.info(f"\rSegment {s + 1} of {segs}")
+        logging.info(f"\rSegment {s + 1} of {segs}")
         ss = 0 + 0j
 
         # Loop over x, y, z
