@@ -2,8 +2,7 @@ import numpy as np
 from scipy.fftpack import dst
 
 # Max spacing variation in series that is allowed
-dt_dk_tolerance = 1e-8  # (~1e-10 suggested)
-dr_tolerance = 1e-6
+dt_dnu_tolerance = 1e-8  # (~1e-10 suggested)
 
 def FT(
     t: np.ndarray, x: np.ndarray, indvar: bool = True
@@ -54,7 +53,7 @@ def FT(
     """
     dt = (t[-1] - t[0]) / float(len(t) - 1)
 
-    if (abs(np.diff(t) - dt) > dt_dk_tolerance).any():
+    if (abs(np.diff(t) - dt) > dt_dnu_tolerance).any():
         raise ValueError("Time series not equally spaced!")
 
     N = len(t)
@@ -72,7 +71,7 @@ def FT(
 
 
 def iFT(
-    k: np.ndarray, xf: np.ndarray, indvar: bool = True
+    nu: np.ndarray, xf: np.ndarray, indvar: bool = True
 ) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
     """Inverse Fourier transformation using fast Fourier transformation (FFT).
 
@@ -82,7 +81,7 @@ def iFT(
 
     Parameters
     ----------
-    k : numpy.ndarray
+    nu : numpy.ndarray
         The frequency series.
     xf : numpy.ndarray
         The function series in the frequency domain.
@@ -106,18 +105,16 @@ def iFT(
     :func:`FT` : For the Fourier transform.
 
     """
-    dk = (k[-1] - k[0]) / float(len(k) - 1)
+    dnu = (nu[-1] - nu[0]) / float(len(nu) - 1)
 
-    if (abs(np.diff(k) - dk) > dt_dk_tolerance).any():
+    if (abs(np.diff(nu) - dnu) > dt_dnu_tolerance).any():
         raise ValueError("Time series not equally spaced!")
 
-    N = len(k)
-    x = np.fft.ifftshift(np.fft.ifft(xf))
-    t = np.fft.ifftshift(np.fft.fftfreq(N, d=dk)) * 2 * np.pi
-    if N % 2 == 0:
-        x2 = x * np.exp(-1j * t * N * dk / 2.0) * N * dk / (2 * np.pi)
-    else:
-        x2 = x * np.exp(-1j * t * (N - 1) * dk / 2.0) * N * dk / (2 * np.pi)
+    N = len(nu)
+    x = np.fft.fftshift(np.fft.ifft(np.fft.ifftshift(xf)))
+    t = np.fft.fftshift(np.fft.fftfreq(N, d=dnu))
+    x2 = x * N * dnu
+
     if indvar:
         return t, x2
     return x2
