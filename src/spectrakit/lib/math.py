@@ -27,6 +27,7 @@ def FT(
             - ``k`` (numpy.ndarray): Frequency values corresponding to the FFT.
             - ``xf2`` (numpy.ndarray): FFT of the input function, scaled by the time
               range and phase shifted.
+            QUESTION:: WHY WOULD YOU PHASE SHIFT IT? 
 
         If indvar is :obj:`False`, returns the FFT (``xf2``) directly as a
         :class:`numpy.ndarray`.
@@ -59,15 +60,14 @@ def FT(
     N = len(t)
 
     # calculate frequency values for FT
-    k = np.fft.fftshift(np.fft.fftfreq(N, d=dt) * 2 * np.pi)
+    nu = np.fft.fftshift(np.fft.fftfreq(N, d=dt))
 
     # calculate FT of data
     xf = np.fft.fftshift(np.fft.fft(x))
-    a, b = np.min(t), np.max(t)
-    xf2 = xf * (b - a) / N * np.exp(-1j * k * a)
+    xf2 = xf * dt
 
     if indvar:
-        return k, xf2
+        return nu, xf2
     return xf2
 
 
@@ -77,7 +77,7 @@ def iFT(
     """Inverse Fourier transformation using fast Fourier transformation (FFT).
 
     Takes the frequency series and the function as arguments. By default, returns the
-    iFT and the time series. Setting indvar=False means the function returns only the
+    iFT and the time values. Setting indvar=False means the function returns only the
     iFT.
 
     Parameters
@@ -93,7 +93,7 @@ def iFT(
     Returns
     -------
     tuple(numpy.ndarray, numpy.ndarray) or numpy.ndarray
-        If indvar is :obj:`True`, returns a tuple containing the time series and the
+        If indvar is :obj:`True`, returns a tuple containing the time values and the
         iFT. If indvar is :obj:`False`, returns only the iFT.
 
     Raises
