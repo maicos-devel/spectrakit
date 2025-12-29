@@ -37,6 +37,10 @@ def test_FT():
     # check that the smallest frequency is correct
     assert_allclose(nus[501], 1/2/np.pi)
 
-    # check that the fourier transform is returned as expected (unitary FT with angular frequency)
+    # check that the fourier transform is returned as expected (unitary FT with normal frequency)
     peak_height = 1 / dnu / 2j
     assert_allclose(ft[501], peak_height, rtol=1e-10)
+
+    # See carlson 2020
+    # See https://en.wikipedia.org/wiki/Discrete_Fourier_transform#DFT_including_sampling_interval
+    # See https://numpy.org/doc/stable/reference/routines.fft.html
