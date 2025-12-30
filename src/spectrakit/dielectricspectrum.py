@@ -100,6 +100,7 @@ def calculate_spectrum_from_dipole(
     pref /= 3 * volume * scipy.constants.angstrom**3
     pref /= scipy.constants.k * temperature
     pref /= scipy.constants.epsilon_0
+    pref *= np.pi
 
     # Create time array for segment (no padding)
     t = dt * np.arange(seglen)
