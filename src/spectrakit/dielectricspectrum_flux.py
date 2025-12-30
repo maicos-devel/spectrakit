@@ -66,7 +66,7 @@ def calculate_spectrum_from_flux(
 
     # Prefactor for susceptibility
     # Polarization: eÅ / ps 
-    pref = (scipy.constants.e) ** 2 * scipy.constants.angstrom**2 / scipy.constants.pico**2 
+    pref = (scipy.constants.e) ** 2 * scipy.constants.angstrom**2
     # Volume: Ų to m³
     pref /= 3 * volume * scipy.constants.angstrom**3
     pref /= scipy.constants.k * temperature
@@ -100,7 +100,8 @@ def calculate_spectrum_from_flux(
         False,
     )
     susc.real = kramers_kronig.imag
-
+    
+    susc *= pref / (n_frames * dt)
     # Only keep positive frequencies
     pos_mask = nu >= 0
     nu = nu[pos_mask]
