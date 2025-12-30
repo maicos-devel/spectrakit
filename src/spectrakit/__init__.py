@@ -8,4 +8,10 @@ from .dielectricspectrum import (
     calculate_spectrum_from_dipole,
 )
 
-__all__ = ["DielectricSpectrum", "calculate_spectrum_from_dipole"]
+from .dielectricspectrum_flux import (
+    DielectricSpectrumFlux,
+    calculate_spectrum_from_flux,
+)
+
+__all__ = ["DielectricSpectrum", "calculate_spectrum_from_dipole",
+           "DielectricSpectrumFlux", "calculate_spectrum_from_flux"]

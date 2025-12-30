@@ -14,7 +14,7 @@ import MDAnalysis as mda
 import numpy as np
 import scipy.constants
 from maicos.core import AnalysisBase
-from maicos.lib.math import FT, iFT
+from .lib.math import FT, iFT
 from maicos.lib.util import (
     bin,
     charge_neutral,
@@ -153,8 +153,7 @@ def calculate_spectrum_from_dipole(
     susc *= pref / (seglen * segs * dt)
     dsusc *= pref / (seglen * segs * dt)
 
-    # Convert to THz
-    nu = nu / (2 * np.pi)
+    # Removed conversion to THz, happens inside FT now
 
     # Only keep positive frequencies
     pos_mask = nu >= 0
@@ -192,7 +191,6 @@ def calculate_spectrum_from_dipole(
         pass
 
     return results
-
 
 @render_docs
 @charge_neutral(filter="error")

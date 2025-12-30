@@ -66,7 +66,7 @@ def calculate_spectrum_from_flux(
 
     # Prefactor for susceptibility
     # Polarization: eÅ / ps 
-    pref = (scipy.constants.e) ** 2 * scipy.constants.angstrom**2 / scipy.constants.picosecond**2
+    pref = (scipy.constants.e) ** 2 * scipy.constants.angstrom**2 / scipy.constants.pico**2 
     # Volume: Ų to m³
     pref /= 3 * volume * scipy.constants.angstrom**3
     pref /= scipy.constants.k * temperature
@@ -88,6 +88,10 @@ def calculate_spectrum_from_flux(
         f_nu_squared += np.abs(FP_dot)**2
 
     susc = f_nu_squared * 1j / nu
+
+    # handle the zero frequency bin
+    # TODO: find a better way to do this
+    susc[nu == 0] = 0
 
     # Get the real part by Kramers-Kronig
     kramers_kronig: np.ndarray = iFT(
