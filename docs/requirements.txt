@@ -1,0 +1,8 @@
+furo
+setuptools
+sphinx
+sphinx-gallery
+sphinxcontrib-bibtex
+sphinxcontrib-details-directive
+sphinx-toggleprompt
+sphinx-tabs

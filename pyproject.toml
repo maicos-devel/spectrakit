@@ -37,12 +37,13 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-dependencies = ["maicos>=0.11.2"]
+dependencies = ["maicos>=0.11.2", "mdacli<=0.1.35"]
 dynamic = ["version"]
 
 [project.urls]
-"Homepage" = "https://github.com/maicos-devel/spectrakit"
-"Bug Tracker" = "https://github.com/maicos-devel/spectrakit/issues"
+homepage = "https://github.com/maicos-devel/spectrakit"
+repository = "https://github.com/maicos-devel/spectrakit"
+issues = "https://github.com/maicos-devel/spectrakit/issues"
 
 [tool.check-manifest]
 # ignore files missing in VCS
