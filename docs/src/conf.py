@@ -42,10 +42,16 @@ extensions = [
     "sphinx.ext.intersphinx",  # generate links to in external projects
     "sphinx.ext.mathjax",  # Render math via JavaScript
     "sphinx.ext.napoleon",  # Support for NumPy and Google style docstrings
+    "sphinxcontrib.bibtex",  # Cite references using a bibtex file
     "sphinxcontrib.details.directive",  # details directive for collapsible content
     "sphinx_toggleprompt",  # button to examples to toggle prompts
     "sphinx_tabs.tabs",
 ]
+
+# The path to the bibtex file
+bibtex_bibfiles = ["./_static/refs.bib"]
+bibtex_default_style = "unsrt"
+bibtex_reference_style = "author_year"
 
 sphinx_gallery_conf = {
     "copyfile_regex": r".*\.(tpr|trr|xtc)",
