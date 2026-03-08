@@ -819,11 +819,11 @@ def WienerKhinchin(time, timeseries, volume, temperature, spectrum_type="dipole"
     dielectricspectrum_imag = powerspectrum * pref
 
     if spectrum_type == "dipole":
-        dielectricspectrum_imag *= np.pi * nu
+        dielectricspectrum_imag *= nu
     elif spectrum_type == "flux":
         with np.errstate(divide="ignore", invalid="ignore"):
             dielectricspectrum_imag = np.where(
-                nu != 0, dielectricspectrum_imag / (nu * 4 * np.pi), 0.0
+                nu != 0, dielectricspectrum_imag / nu, 0.0
             )
     else:
         raise ValueError(f"{spectrum_type} not implemented. Use dipole or flux.")
