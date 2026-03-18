@@ -21,7 +21,12 @@ from maicos.lib.util import (
     render_docs,
 )
 
-from spectrakit.lib.math import FT, iFT, powerspectrum_from_timeseries, hilbert_transform
+from spectrakit.lib.math import (
+    FT,
+    hilbert_transform,
+    iFT,
+    powerspectrum_from_timeseries,
+)
 from spectrakit.lib.util import bin
 
 logger = logging.getLogger(__name__)
@@ -829,6 +834,6 @@ def WienerKhinchin(time, timeseries, volume, temperature, spectrum_type="dipole"
         raise ValueError(f"{spectrum_type} not implemented. Use dipole or flux.")
 
     # Get the real-part by Kramers-Kronig / Hilbert Transform
-    dielectricspectrum_real = - hilbert_transform(nu, dielectricspectrum_imag)
+    dielectricspectrum_real = -hilbert_transform(nu, dielectricspectrum_imag)
 
     return nu, dielectricspectrum_real + 1j * dielectricspectrum_imag

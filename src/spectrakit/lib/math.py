@@ -174,6 +174,7 @@ def correlation_function(
 
     return t, c_t
 
+
 def hilbert_transform(nu, f):
     """Implementation of Kramers Kronig using the Hilbert transform.
 
