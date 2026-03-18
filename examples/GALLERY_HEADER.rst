@@ -1,0 +1,4 @@
+.. _userdoc-examples:
+
+Examples
+--------
