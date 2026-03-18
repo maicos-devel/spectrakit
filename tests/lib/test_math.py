@@ -39,5 +39,5 @@ def test_iFT_unequal_spacing():
     t[0] += 1e-5  # make it unequal
     sin = np.sin(5 * t)
     match = "Frequency series is not equally spaced."
-    with spectrakit.raises(ValueError, match=match):
+    with pytest.raises(ValueError, match=match):
         spectrakit.lib.math.iFT(t, sin)
