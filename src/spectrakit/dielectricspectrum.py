@@ -23,8 +23,8 @@ from maicos.lib.util import (
 
 from spectrakit.lib.math import (
     FT,
-    kramers_kronig,
     iFT,
+    kramers_kronig,
     powerspectrum_from_timeseries,
 )
 from spectrakit.lib.util import bin
@@ -563,8 +563,8 @@ class Polarization(AnalysisBase):
     total dipole moment of the atomgroup and the whole system. It repairs molecules that
     are broken across periodic boundaries by reassembling them before calculating the
     dipole moment. The dipole moment is calculated as
-    :math:`\mathbf{P} = \sum_i q_i \mathbf{r}_i`, where :math:`q_i`
-    and :math:`\mathbf{r}_i` are the charge and position of atom :math:`i`, respectively.
+    :math:`\mathbf{P} = \sum_i q_i \mathbf{r}_i`, where :math:`q_i` and
+    :math:`\mathbf{r}_i` are the charge and position of atom :math:`i`, respectively.
 
     Please read and cite :footcite:p:`carlsonExploringAbsorptionSpectrum2020`.
 
@@ -608,7 +608,7 @@ class Polarization(AnalysisBase):
     def _prepare(self) -> None:
         self.dt = self._trajectory.dt * self.step
         self._obs.V = 0
-        # TODO(@hejamu) Abstract this away
+        # TODO(@hejamu): Abstract this away
         self.P = np.zeros((self.n_frames, 3))
         self.P_total = np.zeros((self.n_frames, 3))
         self.V = np.zeros(self.n_frames)
@@ -644,8 +644,8 @@ class Current(AnalysisBase):
     This module, given a molecular dynamics trajectory, produces a time series of the
     curren of the atomgroup and the whole system.
 
-    :math:`\mathbf{P} = \sum_i q_i \mathbf{r}_i`, where :math:`q_i`
-    and :math:`\mathbf{r}_i` are the charge and position of atom :math:`i`, respectively.
+    :math:`\mathbf{P} = \sum_i q_i \mathbf{r}_i`, where :math:`q_i` and
+    :math:`\mathbf{r}_i` are the charge and position of atom :math:`i`, respectively.
 
     Please read and cite Rinne paper...
 
@@ -689,7 +689,7 @@ class Current(AnalysisBase):
     def _prepare(self) -> None:
         self.dt = self._trajectory.dt * self.step
         self._obs.V = 0
-        # TODO(@hejamu) Abstract this away
+        # TODO(@hejamu): Abstract this away
         self.J = np.zeros((self.n_frames, 3))
         self.J_total = np.zeros((self.n_frames, 3))
         self.V = np.zeros(self.n_frames)
@@ -722,8 +722,8 @@ class VACF(AnalysisBase):
     velocity autocorrelation function of the atomgroup and the whole system. It repairs
     molecules that are broken across periodic boundaries by reassembling them before
     calculating the dipole moment. The dipole moment is calculated as
-    :math:`\mathbf{P} = \sum_i q_i \mathbf{r}_i`, where :math:`q_i`
-    and :math:`\mathbf{r}_i` are the charge and position of atom :math:`i`, respectively.
+    :math:`\mathbf{P} = \sum_i q_i \mathbf{r}_i`, where :math:`q_i` and
+    :math:`\mathbf{r}_i` are the charge and position of atom :math:`i`, respectively.
 
 
     Parameters

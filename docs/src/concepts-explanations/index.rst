@@ -9,3 +9,10 @@ This section provides the theory and explains the general design of spectrakit.
     :maxdepth: 1
 
     general-design
+
+Coming soon:
+
+- Dipole derivative
+- Wiener-Khinchin theorem
+- Windowing
+- Advanced topics

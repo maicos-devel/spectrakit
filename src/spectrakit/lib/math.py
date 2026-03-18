@@ -141,7 +141,8 @@ def powerspectrum_from_timeseries(t, timeseries):
     r"""Take a timeseries and calculate the power spectrum.
 
     The power spectrum is defined by
-    :math:`\int_{\infty}^{\infty} dt e^{2 \pi i \nu t} \langle f(0) f(t) \rangle = \frac{1}{L_t} | f(\nu) |^2`
+    :math:`\int_{\infty}^{\infty} dt e^{2 \pi i \nu t} \langle f(0) f(t) \rangle
+    = \frac{1}{L_t} | f(\nu) |^2`
     as defined in the SI of Carlson20a.
 
     This function returns :math:`\frac{1}{L_t} | f(\nu) |^2`
@@ -176,10 +177,6 @@ def correlation_function(
 
 
 def kramers_kronig(nu, f):
-    """Implementation of Kramers Kronig using the Hilbert transform.
-
-    See `https://en.wikipedia.org/wiki/Hilbert_transform#Relationship_with_the_Fourier_transform`.
-    """
+    """Implementation of Kramers Kronig using the Hilbert transform."""
     time, ft = FT(nu, f, True)
-    transformed = iFT(time, -1j * np.sign(nu) * ft, False)
-    return transformed
+    return iFT(time, -1j * np.sign(nu) * ft, False)
