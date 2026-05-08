@@ -13,6 +13,7 @@ description = "Compute spectra from MD simulation data"
 authors = [{name = "MAICoS Developer Team"}]
 maintainers = [
     {name = "Henrik Stooß"},
+    {name = "Kira Fischer"}
 ]
 readme = "README.md"
 requires-python = ">=3.11"
@@ -39,6 +40,9 @@ classifiers = [
 ]
 dependencies = ["maicos>=0.11.2", "mdacli<=0.1.35"]
 dynamic = ["version"]
+
+[project.optional-dependencies]
+examples = ["matplotlib"]
 
 [project.urls]
 homepage = "https://github.com/maicos-devel/spectrakit"
