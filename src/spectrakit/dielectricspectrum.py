@@ -31,6 +31,7 @@ from spectrakit.lib.util import bin
 
 logger = logging.getLogger(__name__)
 
+
 @render_docs
 def calculate_spectrum_from_dipole(
     dipole_moment: np.ndarray,
@@ -201,6 +202,7 @@ def calculate_spectrum_from_dipole(
 
     return results
 
+
 @render_docs
 def calculate_spectrum_from_current(
     current: np.ndarray,
@@ -213,7 +215,7 @@ def calculate_spectrum_from_current(
     binafter: float = 20,
     nobin: bool = False,
 ) -> dict[str, np.ndarray]:
-    """Calculate dielectric spectrum from current (dipole derivative) time series.
+    r"""Calculate dielectric spectrum from current (dipole derivative) time series.
 
     This function computes the complex dielectric susceptibility from a current
     time series J(t) = dP/dt using the Fluctuation-Dissipation theorem. It is
