@@ -31,7 +31,7 @@ from spectrakit.lib.util import bin
 
 logger = logging.getLogger(__name__)
 
-
+@render_docs
 def calculate_spectrum_from_dipole(
     dipole_moment: np.ndarray,
     dt: float,
@@ -201,7 +201,7 @@ def calculate_spectrum_from_dipole(
 
     return results
 
-
+@render_docs
 def calculate_spectrum_from_current(
     current: np.ndarray,
     dt: float,
@@ -221,8 +221,8 @@ def calculate_spectrum_from_current(
     the time derivative of the dipole moment, avoiding the need to integrate
     the current back to a dipole moment.
 
-    Since FT(dP/dt) = iν·FT(P), we have |FT(J)|² = ν²·|FT(P)|², so
-    |FT(J)|²/ν yields the same spectrum as |FT(P)|²·ν.
+    Since FT(dP/dt) = iν·FT(P), we have \\|FT(J)\\|² = ν²·\\|FT(P)\\|², so
+    \\|FT(J)\\|²/ν yields the same spectrum as \\|FT(P)\\|²·ν.
 
     Parameters
     ----------
@@ -556,6 +556,7 @@ class DielectricSpectrum(AnalysisBase):
             logging.info("Binned susceptibility data saved as {suscfilename}")
 
 
+@render_docs
 class Polarization(AnalysisBase):
     r"""Dipole moment time series from md trajectory.
 
@@ -638,6 +639,7 @@ class Polarization(AnalysisBase):
             Vfile.write(str(self.results.V))
 
 
+@render_docs
 class Current(AnalysisBase):
     r"""Current time series from md trajectory.
 
@@ -715,6 +717,7 @@ class Current(AnalysisBase):
         np.save(self.output_prefix + "tseries.npy", self.results.t)
 
 
+@render_docs
 class VACF(AnalysisBase):
     r"""Velocity autocorrelation function from md trajectory.
 
