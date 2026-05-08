@@ -13,8 +13,9 @@ description = "Compute spectra from MD simulation data"
 authors = [{name = "MAICoS Developer Team"}]
 maintainers = [
     {name = "Henrik Stooß"},
+    {name = "Kira Fischer"}
 ]
-readme = "README.md"
+readme = "README.rst"
 requires-python = ">=3.11"
 keywords = ["Science", "Molecular Dynamics", "Dielectric Spectra", "MDAnalysis"]
 license = "GPL-3.0-or-later"
@@ -40,6 +41,9 @@ classifiers = [
 dependencies = ["maicos>=0.11.2", "mdacli<=0.1.35"]
 dynamic = ["version"]
 
+[project.optional-dependencies]
+examples = ["matplotlib"]
+
 [project.urls]
 homepage = "https://github.com/maicos-devel/spectrakit"
 repository = "https://github.com/maicos-devel/spectrakit"
@@ -47,7 +51,7 @@ issues = "https://github.com/maicos-devel/spectrakit/issues"
 
 [tool.check-manifest]
 # ignore files missing in VCS
-ignore = ["src/spectrakit/_version.py"]
+ignore = ["src/spectrakit/_version.py", "docs/src/sg_execution_times.rst"]
 
 [tool.mypy]
 exclude = ["docs/src/examples"]

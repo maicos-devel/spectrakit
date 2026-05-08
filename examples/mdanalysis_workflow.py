@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-"""
+""".. _howto-mdanalysis-workflow:
+
 MDAnalysis Workflow
 -------------------
 
