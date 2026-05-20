@@ -18,7 +18,7 @@ users can use the Python API for their day to day analysis.
 Spectrumkit is maintained by the MAICoS developer team.
 Keep up to date with Spectrumkit news by following us on Twitter_. If you find an issue, you
 can report it on GitHub_. You can also join the developer team on Discord_ to discuss
-possible improvements and usages of Scatterkit.
+possible improvements and usages of Spectrumkit.
 
 .. _`MDAnalysis`: https://www.mdanalysis.org
 .. _`Twitter`: https://twitter.com/maicos_analysis
@@ -31,10 +31,10 @@ Documentation
 =============
 
 For details, tutorials, and examples, visit our official `documentation`_. We also
-provide the `latest documentation`_ for the current development version of Scatterkit.
+provide the `latest documentation`_ for the current development version of Spectrumkit.
 
 .. _`documentation`: https://maicos-devel.github.io/spectrumkit
-.. _`latest documentation`: https://maicos-devel.github.io/scatterkit/latest
+.. _`latest documentation`: https://maicos-devel.github.io/spectrumkit/latest
 
 .. inclusion-readme-installation-start
 
@@ -70,18 +70,18 @@ Currently, Spectrumkit supports the following analysis modules (alphabetically):
 Contributors
 ============
 
-Thanks to all contributors who make **Scatterkit** possible:
+Thanks to all contributors who make **Spectrumkit** possible:
 
-.. image:: https://contrib.rocks/image?repo=maicos-devel/scatterkit
-   :target: https://github.com/maicos-devel/scatterkit/graphs/contributors
+.. image:: https://contrib.rocks/image?repo=maicos-devel/spectrumkit
+   :target: https://github.com/maicos-devel/spectrumkit/graphs/contributors
 
-.. |tests| image:: https://github.com/maicos-devel/scatterkit/workflows/Tests/badge.svg
+.. |tests| image:: https://github.com/maicos-devel/spectrumkit/workflows/Tests/badge.svg
    :alt: GitHub Actions Tests Job Status
-   :target: https://github.com/maicos-devel/scatterkit/actions?query=branch%3Amain
+   :target: https://github.com/maicos-devel/spectrumkit/actions?query=branch%3Amain
 
-.. |codecov| image:: https://codecov.io/gh/maicos-devel/scatterkit/graph/badge.svg?token=9AXPLF6CR3
+.. |codecov| image:: https://codecov.io/gh/maicos-devel/spectrumkit/graph/badge.svg?token=9AXPLF6CR3
    :alt: Code coverage
-   :target: https://codecov.io/gh/maicos-devel/scatterkit
+   :target: https://codecov.io/gh/maicos-devel/spectrumkit
 
 .. |docs-stable| image:: https://img.shields.io/badge/📚_Documentation-stable-success
    :alt: Documentation of stable released version
