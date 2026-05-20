@@ -1,11 +1,11 @@
 Usage - Python Interpreter
 ==========================
 
-To use Spectrakit using the Python interpreter see
+To use Spectrumkit using the Python interpreter see
 
 - the How-To: :ref:`howto-mdanalysis-workflow`,
 - or the `MAICoS tutorial`_, for a more basic introduction.
-  Spectrakit follows the same principles as MAICoS,
+  Spectrumkit follows the same principles as MAICoS,
   the Molecular Analysis for Interfacial and Confined Systems toolkit.
 
 .. _MAICOS tutorial:

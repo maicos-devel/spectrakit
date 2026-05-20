@@ -3,7 +3,7 @@
 DielectricSpectrum
 ##################
 
-.. autoclass:: spectrakit.DielectricSpectrum
+.. autoclass:: spectrumkit.DielectricSpectrum
     :members: +run, save
     :undoc-members:
     :show-inheritance:

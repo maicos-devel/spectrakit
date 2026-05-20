@@ -3,12 +3,12 @@
 Getting started
 ===============
 
-This sections describes Spectrakit, how to install it, and its most basic commands.
+This sections describes Spectrumkit, how to install it, and its most basic commands.
 
 .. toctree::
     :maxdepth: 0
 
-    spectrakit
+    spectrumkit
     installation
     usage-python
     units
