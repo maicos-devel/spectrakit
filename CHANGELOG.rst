@@ -16,22 +16,22 @@ v0.1.0 (2026/05/20)
 
 Initial release of spectrumkit.
 
-- rename spectrakit to spectrumkit (`#19`_).
-- ReadTheDocs integration with Sphinx documentation (`#16`_).
-- Fixed magnitude and Kramers–Kronig sign conventions (`#16`_).
+- rename spectrakit to spectrumkit (#19).
+- ReadTheDocs integration with Sphinx documentation (#16).
+- Fixed magnitude and Kramers–Kronig sign conventions (#16).
 - ``lib/math.py``: phase-correct, physical-units FFT wrappers ``FT``/``iFT``,
-  ``powerspectrum_from_timeseries``, and ``kramers_kronig`` (`#16`_).
+  ``powerspectrum_from_timeseries``, and ``kramers_kronig`` (#16).
 - ``lib/util.py``: ``bin()`` for logarithmic index-based averaging of arrays
-  (`#16`_).
-- ``lib/preprocessing.py``: ``hann_window()`` windowing helper (`#16`_).
+  (#16).
+- ``lib/preprocessing.py``: ``hann_window()`` windowing helper (#16).
 - Fixed zero-padding behaviour in the FFT to correctly handle segment
-  boundaries (`#10`_).
+  boundaries (#10).
 - Standalone ``calculate_spectrum_from_dipole`` and
   ``calculate_spectrum_from_current`` functions decoupled from the MDAnalysis
-  workflow, accepting pre-computed numpy arrays directly (`#6`_).
+  workflow, accepting pre-computed numpy arrays directly (#6).
 - ``WienerKhinchin`` alternative analysis class for simpler single-segment
-  calculations without error estimation (`#6`_).
-- GitHub Actions CI pipeline (tests, lint, build, release) (`#1`_).
+  calculations without error estimation (#6).
+- GitHub Actions CI pipeline (tests, lint, build, release) (#1).
 - ``tox`` environments for tests, lint, formatting, build, and docs.
 - seperate spectrum code from maicos.
 - ``DielectricSpectrum`` MDAnalysis-based analysis class that computes the
