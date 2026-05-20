@@ -3,7 +3,7 @@
 DielectricSpectrum Module
 #########################
 
-.. automodule:: spectrakit.dielectricspectrum
+.. automodule:: spectrumkit.dielectricspectrum
     :members:
     :undoc-members:
     :show-inheritance:

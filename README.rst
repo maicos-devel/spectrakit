@@ -1,28 +1,28 @@
-Spectrakit
-==========
+Spectrumkit
+===========
 
 |tests| |codecov| |docs-stable| |docs-latest| |mdanalysis|
 
 .. inclusion-readme-intro-start
 
-**Spectrakit** is an object-oriented python toolkit for analysing the dielectric spectrum of
+**Spectrumkit** is an object-oriented python toolkit for analysing the dielectric spectrum of
 fluids from molecular simulations. Combined with MDAnalysis_,
-Spectrakit can be used to extract dielectric spectrum data from trajectory files,
-including LAMMPS, GROMACS, CHARMM or NAMD data. Spectrakit is open source and is
+Spectrumkit can be used to extract dielectric spectrum data from trajectory files,
+including LAMMPS, GROMACS, CHARMM or NAMD data. Spectrumkit is open source and is
 released under the GNU general public license v3.0.
 
-Spectrakit is a tool for beginners of molecular simulations with no prior Python experience.
-For these users Spectrakit provides a descriptive command line interface. Also experienced
+Spectrumkit is a tool for beginners of molecular simulations with no prior Python experience.
+For these users Spectrumkit provides a descriptive command line interface. Also experienced
 users can use the Python API for their day to day analysis.
 
-Spectrakit is maintained by the MAICoS developer team.
-Keep up to date with Spectrakit news by following us on Twitter_. If you find an issue, you
+Spectrumkit is maintained by the MAICoS developer team.
+Keep up to date with Spectrumkit news by following us on Twitter_. If you find an issue, you
 can report it on GitHub_. You can also join the developer team on Discord_ to discuss
 possible improvements and usages of Scatterkit.
 
 .. _`MDAnalysis`: https://www.mdanalysis.org
 .. _`Twitter`: https://twitter.com/maicos_analysis
-.. _`GitHub`: https://github.com/maicos-devel/spectrakit
+.. _`GitHub`: https://github.com/maicos-devel/spectrumkit
 .. _`Discord`: https://discord.gg/mnrEQWVAed
 
 .. inclusion-readme-intro-end
@@ -33,7 +33,7 @@ Documentation
 For details, tutorials, and examples, visit our official `documentation`_. We also
 provide the `latest documentation`_ for the current development version of Scatterkit.
 
-.. _`documentation`: https://maicos-devel.github.io/spectrakit
+.. _`documentation`: https://maicos-devel.github.io/spectrumkit
 .. _`latest documentation`: https://maicos-devel.github.io/scatterkit/latest
 
 .. inclusion-readme-installation-start
@@ -41,9 +41,9 @@ provide the `latest documentation`_ for the current development version of Scatt
 Installation
 ============
 
-Install Spectrakit using `pip`_::
+Install Spectrumkit using `pip`_::
 
-    pip install spectrakit
+    pip install spectrumkit
 
 .. _`pip`: https://pip.pypa.io
 
@@ -54,7 +54,7 @@ List of Analysis Modules
 
 .. inclusion-marker-modules-start
 
-Currently, Spectrakit supports the following analysis modules (alphabetically):
+Currently, Spectrumkit supports the following analysis modules (alphabetically):
 
 .. list-table::
    :widths: 25 50

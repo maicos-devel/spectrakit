@@ -21,13 +21,13 @@ from maicos.lib.util import (
     render_docs,
 )
 
-from spectrakit.lib.math import (
+from spectrumkit.lib.math import (
     FT,
     iFT,
     kramers_kronig,
     powerspectrum_from_timeseries,
 )
-from spectrakit.lib.util import bin
+from spectrumkit.lib.util import bin
 
 logger = logging.getLogger(__name__)
 

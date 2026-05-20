@@ -1,4 +1,4 @@
-"""spectrakit: Compute spectra from MD simulation data."""
+"""spectrumkit: Compute spectra from MD simulation data."""
 
 __authors__ = "MAICoS Developer Team"
 

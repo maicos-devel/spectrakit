@@ -9,5 +9,5 @@ Foundation
 ----------
 
 .. image:: ../_static/flowchart.svg
-   :alt: UML chart of the spectrakit design
+   :alt: UML chart of the spectrumkit design
    :align: center

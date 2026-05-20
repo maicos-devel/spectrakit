@@ -1,7 +1,7 @@
 CHANGELOG file
 --------------
 
-The rules for spectrakit's CHANGELOG file:
+The rules for spectrumkit's CHANGELOG file:
 
 - entries are sorted newest-first.
 - summarize sets of changes (don't reproduce every git log comment here).
@@ -14,8 +14,9 @@ The rules for spectrakit's CHANGELOG file:
 v0.1.0 (2026/05/20)
 -------------------
 
-Initial release of spectrakit.
+Initial release of spectrumkit.
 
+- rename spectrakit to spectrumkit.
 - ReadTheDocs integration with Sphinx documentation (`#16`_).
 - Fixed magnitude and Kramers–Kronig sign conventions (`#16`_).
 - ``lib/math.py``: phase-correct, physical-units FFT wrappers ``FT``/``iFT``,

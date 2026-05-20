@@ -15,7 +15,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
-from spectrakit import DielectricSpectrum, calculate_spectrum_from_dipole
+from spectrumkit import DielectricSpectrum, calculate_spectrum_from_dipole
 
 sys.path.append(str(Path(__file__).parents[1]))
 from data import WATER_TPR_NPT, WATER_TRR_NPT  # noqa: E402

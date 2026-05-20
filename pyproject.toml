@@ -8,7 +8,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "spectrakit"
+name = "spectrumkit"
 description = "Compute spectra from MD simulation data"
 authors = [{name = "MAICoS Developer Team"}]
 maintainers = [
@@ -45,13 +45,13 @@ dynamic = ["version"]
 examples = ["matplotlib"]
 
 [project.urls]
-homepage = "https://github.com/maicos-devel/spectrakit"
-repository = "https://github.com/maicos-devel/spectrakit"
-issues = "https://github.com/maicos-devel/spectrakit/issues"
+homepage = "https://github.com/maicos-devel/spectrumkit"
+repository = "https://github.com/maicos-devel/spectrumkit"
+issues = "https://github.com/maicos-devel/spectrumkit/issues"
 
 [tool.check-manifest]
 # ignore files missing in VCS
-ignore = ["src/spectrakit/_version.py", "docs/src/sg_execution_times.rst"]
+ignore = ["src/spectrumkit/_version.py", "docs/src/sg_execution_times.rst"]
 
 [tool.mypy]
 exclude = ["docs/src/examples"]
@@ -59,7 +59,7 @@ follow_imports = 'skip'
 ignore_missing_imports = true
 
 [tool.coverage.paths]
-source = ["src/spectrakit", "*/site-packages"]
+source = ["src/spectrumkit", "*/site-packages"]
 
 [tool.coverage.report]
 skip_covered = true
@@ -118,7 +118,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["spectrakit"]
+known-first-party = ["spectrumkit"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -127,4 +127,4 @@ docstring-code-format = true
 where = ["src"]
 
 [tool.setuptools_scm]
-version_file = "src/spectrakit/_version.py"
+version_file = "src/spectrumkit/_version.py"
