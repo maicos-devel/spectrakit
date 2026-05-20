@@ -17,7 +17,7 @@ from datetime import datetime
 from pathlib import Path
 
 # -- Path setup --------------------------------------------------------------
-import spectrakit
+import spectrumkit
 
 ROOT = Path("../../")
 
@@ -27,8 +27,8 @@ with Path(ROOT / "pyproject.toml").open(mode="rb") as fp:
     project_dict = tomllib.load(fp)["project"]
 
 project = project_dict["name"]
-author = spectrakit.__authors__
-version = spectrakit.__version__
+author = spectrumkit.__authors__
+version = spectrumkit.__version__
 copyright = f"{datetime.now().date().year}, {author}"
 
 # -- General configuration ---------------------------------------------------
@@ -60,8 +60,8 @@ sphinx_gallery_conf = {
     "filename_pattern": r"\.py",
     "gallery_dirs": ["generated_examples"],
     "min_reported_time": 60,
-    "prefer_full_module": ["spectrakit"],
-    "reference_url": {"spectrakit": None},
+    "prefer_full_module": ["spectrumkit"],
+    "reference_url": {"spectrumkit": None},
     "remove_config_comments": True,
 }
 
@@ -94,7 +94,7 @@ pygments_style = "tango"
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = "furo"
-html_title = "spectrakit"
+html_title = "spectrumkit"
 # html_favicon = "../static/logo.ico"
 # html_static_path = ["../static"]
 
@@ -123,7 +123,7 @@ html_css_files = [
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
-htmlhelp_basename = "spectrakitdoc"
+htmlhelp_basename = "spectrumkitdoc"
 
 
 # -- Extension configuration -------------------------------------------------

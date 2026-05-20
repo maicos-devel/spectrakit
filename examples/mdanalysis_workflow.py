@@ -11,7 +11,7 @@ exactly as before, maintaining backward compatibility.
 """
 
 import MDAnalysis as mda
-from spectrakit import DielectricSpectrum
+from spectrumkit import DielectricSpectrum
 
 # %%
 #

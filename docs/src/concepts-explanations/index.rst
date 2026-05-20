@@ -3,7 +3,7 @@
 Concepts & explanations
 =======================
 
-This section provides the theory and explains the general design of spectrakit.
+This section provides the theory and explains the general design of spectrumkit.
 
 .. toctree::
     :maxdepth: 1

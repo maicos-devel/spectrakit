@@ -1,5 +1,5 @@
-What is Spectrakit
-==================
+What is Spectrumkit
+===================
 
 .. include:: ../../../README.rst
    :start-after: inclusion-readme-intro-start

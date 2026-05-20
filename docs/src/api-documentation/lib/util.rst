@@ -3,7 +3,7 @@
 General helper functions
 ########################
 
-.. automodule:: spectrakit.lib.util
+.. automodule:: spectrumkit.lib.util
     :members:
     :undoc-members:
     :show-inheritance:

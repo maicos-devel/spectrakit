@@ -4,7 +4,7 @@ How-to guides
 =============
 
 Like a cooking recipe, How-to guides help you solve key problems and use cases. If you
-are a total spectrakit beginner, you should start with the :ref:`userdoc-get-started`
+are a total spectrumkit beginner, you should start with the :ref:`userdoc-get-started`
 section. Otherwise this section consists of introductory examples and examples
 demonstrating specific features of scatterkit using its Python API.
 
@@ -12,4 +12,4 @@ For running the examples install scatterkit with the ``examples`` optional depen
 
 .. code-block:: bash
 
-    pip install spectrakit[examples]
+    pip install spectrumkit[examples]

@@ -3,7 +3,7 @@
 Mathematical helper functions
 #############################
 
-.. automodule:: spectrakit.lib.math
+.. automodule:: spectrumkit.lib.math
     :members:
     :undoc-members:
     :show-inheritance:
