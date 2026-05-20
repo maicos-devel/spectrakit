@@ -11,25 +11,33 @@ The rules for spectrakit's CHANGELOG file:
 
 .. inclusion-marker-changelog-start
 
-v0.0.5 (XXXX/XX/XX)
+v0.1.0 (2026/05/20)
 -------------------
 
-- Fix wrong angles in water models (!6)
-- Add CI, linting, and testing (!6)
-- Fix calculation of the number of particles from the density (!5)
-- Fixed a bug in calling SolvatePlanar (!3)
-- Fix pbc handling (!2)
+Initial release of spectrakit.
 
-v0.0.4 (2023/04/14)
--------------------
-Henrik Jaeger
-
-- Add SolvatePlanar
-
-v0.0.3 (2022/11/02)
--------------------
-Henrik Jaeger
-
-- Initial version
+- ReadTheDocs integration with Sphinx documentation (`#16`_).
+- Fixed magnitude and Kramers–Kronig sign conventions (`#16`_).
+- ``lib/math.py``: phase-correct, physical-units FFT wrappers ``FT``/``iFT``,
+  ``powerspectrum_from_timeseries``, and ``kramers_kronig`` (`#16`_).
+- ``lib/util.py``: ``bin()`` for logarithmic index-based averaging of arrays
+  (`#16`_).
+- ``lib/preprocessing.py``: ``hann_window()`` windowing helper (`#16`_).
+- Fixed zero-padding behaviour in the FFT to correctly handle segment
+  boundaries (`#10`_).
+- Standalone ``calculate_spectrum_from_dipole`` and
+  ``calculate_spectrum_from_current`` functions decoupled from the MDAnalysis
+  workflow, accepting pre-computed numpy arrays directly (`#6`_).
+- ``WienerKhinchin`` alternative analysis class for simpler single-segment
+  calculations without error estimation (`#6`_).
+- GitHub Actions CI pipeline (tests, lint, build, release) (`#1`_).
+- ``tox`` environments for tests, lint, formatting, build, and docs.
+- seperate spectrum code from maicos.
+- ``DielectricSpectrum`` MDAnalysis-based analysis class that computes the
+  frequency-dependent dielectric susceptibility from an MD trajectory using
+  segmented averaging (Welford online variance) and Fourier transforms.
+- Logarithmic frequency binning via ``bins``/``binafter``/``nobin`` parameters.
+- Kramers–Kronig reconstruction of the real part of the susceptibility from
+  the imaginary part via a Hilbert transform.
 
 .. inclusion-marker-changelog-end
