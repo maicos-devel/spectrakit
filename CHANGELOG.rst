@@ -16,7 +16,7 @@ v0.1.0 (2026/05/20)
 
 Initial release of spectrumkit.
 
-- rename spectrakit to spectrumkit.
+- rename spectrakit to spectrumkit (`#19`_).
 - ReadTheDocs integration with Sphinx documentation (`#16`_).
 - Fixed magnitude and Kramers–Kronig sign conventions (`#16`_).
 - ``lib/math.py``: phase-correct, physical-units FFT wrappers ``FT``/``iFT``,
